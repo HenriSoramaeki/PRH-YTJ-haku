@@ -1,0 +1,10 @@
+# Kopioi ../region.yaml -tiedostoksi ja muokkaa kuntalistaa tai hakurajoja.
+region_name_fi: "Etelä-Karjala"
+
+fetch_limits:
+  max_pages_per_location: 200
+
+municipalities:
+  - code: "405"
+    name_fi: "Lappeenranta"
+    location_query: "Lappeenranta"

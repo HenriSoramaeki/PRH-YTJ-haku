@@ -1,0 +1,26 @@
+# Kopioi ../keywords.yaml -tiedostoksi. Lisää omaan käyttöön esim. paikallisia termejä.
+fuzzy_threshold: 88
+partial_ratio_weight: 0.9
+
+weights:
+  name: 0.4
+  business_line: 0.35
+  extra: 0.2
+  website: 0.05
+
+tol_ict_prefixes:
+  - "62"
+  - "63"
+
+exclude_fuzzy_threshold: 90
+exclude_keywords:
+  - term: "ravintola"
+    weight: 1.0
+exclude_tol_prefixes:
+  - "561"
+
+keywords:
+  - term: "ohjelmisto"
+    weight: 1.0
+  - term: "software"
+    weight: 1.0

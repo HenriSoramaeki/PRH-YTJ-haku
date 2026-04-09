@@ -1,0 +1,285 @@
+# ICT-avainsanat (suomi + englanti) — linjassa YTJ/kaupparekisterin tyypillisen sanaston kanssa.
+# exclude_* = ei-ICT -yritykset (poistetaan tuloksista).
+# Muokkaa tarpeen mukaan — tulokset ovat suosituksia.
+
+fuzzy_threshold: 88
+partial_ratio_weight: 0.92
+
+# Poissulun fuzzy (hieman herkempi kuin ICT-osumat)
+exclude_fuzzy_threshold: 90
+exclude_partial_ratio_weight: 0.92
+
+# Missä kentissä exclude-termejä verrataan (ei www-osoitetta — väärät osumat)
+exclude_match_fields:
+  - business_line
+  - name
+  - all_names
+
+weights:
+  name: 0.38
+  business_line: 0.34
+  extra: 0.23
+  website: 0.05
+
+# TOL 2008 — ICT-painotteiset jaottelut (koodi alkaa näin)
+tol_ict_prefixes:
+  - "62"
+  - "63"
+  - "26"
+  - "95"
+
+# TOL-prefiksit jotka tiputetaan kokonaan (ravintola, leipomo, rakennus…)
+# Tarkista organisaatiosi tarpeisiin — liian lyhyt prefiksi voi poistaa liikaa.
+exclude_tol_prefixes:
+  - "561"   # ravintola, ruokapalvelu (56.x)
+  - "562"
+  - "563"
+  - "1071"  # leivät, leipomo
+  - "1072"
+  - "1073"
+  - "41"    # talon- ja kerrostalorakentaminen (41.x)
+  - "42"    # maa- ja vesirakentaminen
+  - "43"    # erikoisrakentaminen
+  - "49"    # maantiekuljetus (ei ICT)
+  - "50"    # vesikuljetus
+  - "51"    # ilmakuljetus
+  - "52"    # varastointi, kuljetusta tukevat toiminnot
+  - "55"    # majoitus (hotellit)
+
+# Sanat jotka viittaavat vahvasti ei-ICT -toimintaan (nimi tai virallinen toimiala)
+exclude_keywords:
+  - term: "leipomo"
+    weight: 1.0
+  - term: "leipomotuote"
+    weight: 1.0
+  - term: "ravintola"
+    weight: 1.0
+  - term: "kahvila"
+    weight: 1.0
+  - term: "baari"
+    weight: 1.0
+  - term: "pub"
+    weight: 0.95
+  - term: "pitopalvelu"
+    weight: 1.0
+  - term: "catering"
+    weight: 1.0
+  - term: "fast food"
+    weight: 1.0
+  - term: "pizzeria"
+    weight: 1.0
+  - term: "kebab"
+    weight: 1.0
+  - term: "sushi"
+    weight: 1.0
+  - term: "rakennusurakointi"
+    weight: 1.0
+  - term: "rakennusliike"
+    weight: 1.0
+  - term: "talonrakennus"
+    weight: 1.0
+  - term: "kerrostalorakentaminen"
+    weight: 1.0
+  - term: "maanrakennus"
+    weight: 1.0
+  - term: "saneeraus"
+    weight: 0.95
+  - term: "remontti"
+    weight: 0.92
+  - term: "sähköasennus"
+    weight: 0.98
+  - term: "lämpöasennus"
+    weight: 0.98
+  - term: "lvi-asennus"
+    weight: 0.98
+  - term: "putkiasennus"
+    weight: 0.98
+  - term: "parturi"
+    weight: 1.0
+  - term: "kampaamo"
+    weight: 1.0
+  - term: "kauneushoitola"
+    weight: 1.0
+  - term: "kynsistudio"
+    weight: 1.0
+  - term: "autokorjaamo"
+    weight: 1.0
+  - term: "rengashotelli"
+    weight: 1.0
+  - term: "pesula"
+    weight: 1.0
+  - term: "siivouspalvelu"
+    weight: 1.0
+  - term: "kiinteistönhuolto"
+    weight: 0.95
+  - term: "maatalous"
+    weight: 1.0
+  - term: "maatila"
+    weight: 1.0
+  - term: "eläinlääkäri"
+    weight: 1.0
+  - term: "apteekki"
+    weight: 1.0
+  - term: "fysioterapia"
+    weight: 1.0
+  - term: "hammaslääkäri"
+    weight: 1.0
+  - term: "terveyskeskus"
+    weight: 0.95
+
+keywords:
+  # Yleinen ICT / YTJ-tyyppinen sanasto
+  - term: "ohjelmisto"
+    weight: 1.1
+  - term: "ohjelmistot"
+    weight: 1.05
+  - term: "software"
+    weight: 1.05
+  - term: "tietojärjestelmä"
+    weight: 1.08
+  - term: "tietojärjestelmät"
+    weight: 1.05
+  - term: "tietojenkäsittely"
+    weight: 1.08
+  - term: "tietojenkäsittelypalvelu"
+    weight: 1.08
+  - term: "tietotekniikka"
+    weight: 1.12
+  - term: "tietotekniikka-ala"
+    weight: 1.05
+  - term: "tietotekniikkapalvelu"
+    weight: 1.08
+  - term: "it-palvelu"
+    weight: 1.05
+  - term: "it palvelu"
+    weight: 1.0
+  - term: "it-infrastruktuuri"
+    weight: 1.05
+  - term: "atk-palvelu"
+    weight: 1.05
+  - term: "atk"
+    weight: 0.85
+  - term: "tietokone"
+    weight: 0.9
+  - term: "tietokonelaitteisto"
+    weight: 0.95
+  - term: "konesali"
+    weight: 1.02
+  - term: "lähituki"
+    weight: 0.95
+  - term: "järjestelmäasiantuntija"
+    weight: 1.0
+  - term: "järjestelmäintegraatio"
+    weight: 1.05
+  - term: "integraatiopalvelu"
+    weight: 1.0
+  - term: "digital"
+    weight: 0.95
+  - term: "digitaalinen"
+    weight: 0.95
+  - term: "digitalisaatio"
+    weight: 0.95
+  - term: "kyberturv"
+    weight: 1.05
+  - term: "cyber security"
+    weight: 1.0
+  - term: "tietoturva"
+    weight: 1.0
+  - term: "tietosuoja"
+    weight: 0.98
+  - term: "gdpr"
+    weight: 0.95
+  - term: "pilvi"
+    weight: 0.95
+  - term: "pilvipalvelu"
+    weight: 1.0
+  - term: "cloud"
+    weight: 1.0
+  - term: "saas"
+    weight: 1.1
+  - term: "hosting"
+    weight: 0.95
+  - term: "webhotelli"
+    weight: 0.95
+  - term: "verkko"
+    weight: 0.85
+  - term: "verkkopalvelu"
+    weight: 0.95
+  - term: "network"
+    weight: 0.85
+  - term: "telekommunikaatio"
+    weight: 0.9
+  - term: "telecommunications"
+    weight: 0.9
+  - term: "tietoliikenne"
+    weight: 0.95
+  - term: "tietoliikennepalvelu"
+    weight: 1.0
+  - term: "datacenter"
+    weight: 1.0
+  - term: "data center"
+    weight: 1.0
+  - term: "palvelinkeskus"
+    weight: 1.0
+  - term: "colocation"
+    weight: 1.0
+  - term: "automaatio"
+    weight: 0.85
+  - term: "automation"
+    weight: 0.85
+  - term: "tekoäly"
+    weight: 1.0
+  - term: "artificial intelligence"
+    weight: 1.0
+  - term: "koneoppiminen"
+    weight: 1.0
+  - term: "machine learning"
+    weight: 1.0
+  - term: "analytics"
+    weight: 0.95
+  - term: "analytiikka"
+    weight: 0.95
+  - term: "integraatio"
+    weight: 0.9
+  - term: "integration"
+    weight: 0.9
+  - term: "erp"
+    weight: 1.0
+  - term: "crm"
+    weight: 1.0
+  - term: "devops"
+    weight: 1.05
+  - term: "koodaus"
+    weight: 0.95
+  - term: "ohjelmointi"
+    weight: 1.0
+  - term: "web"
+    weight: 0.8
+  - term: "web-suunnittelu"
+    weight: 0.95
+  - term: "käyttöliittymä"
+    weight: 0.95
+  - term: "mobiilisovellus"
+    weight: 1.0
+  - term: "mobile app"
+    weight: 1.0
+  - term: "peli"
+    weight: 0.75
+  - term: "game"
+    weight: 0.75
+  - term: "pelisuunnittelu"
+    weight: 0.8
+  - term: "gamedev"
+    weight: 0.85
+  - term: "microsoft"
+    weight: 0.85
+  - term: "dynamics"
+    weight: 0.95
+  - term: "sharepoint"
+    weight: 0.95
+  - term: "power platform"
+    weight: 0.95
+  - term: "tietovarasto"
+    weight: 0.98
+  - term: "big data"
+    weight: 0.95

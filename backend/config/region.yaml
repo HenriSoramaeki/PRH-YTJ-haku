@@ -1,0 +1,35 @@
+# Etelä-Karjala — kunnat PRH/YTJ -haun sijaintiparametrilla ja kuntanumerolla
+region_name_fi: "Etelä-Karjala"
+
+fetch_limits:
+  # PRH palauttaa max 100 / sivu; suurille kunnille voi tarvittaessa nostaa rajaa
+  max_pages_per_location: 350
+
+municipalities:
+  - code: "405"
+    name_fi: "Lappeenranta"
+    location_query: "Lappeenranta"
+  - code: "153"
+    name_fi: "Imatra"
+    location_query: "Imatra"
+  - code: "441"
+    name_fi: "Luumäki"
+    location_query: "Luumäki"
+  - code: "416"
+    name_fi: "Lemi"
+    location_query: "Lemi"
+  - code: "739"
+    name_fi: "Savitaipale"
+    location_query: "Savitaipale"
+  - code: "830"
+    name_fi: "Taipalsaari"
+    location_query: "Taipalsaari"
+  - code: "700"
+    name_fi: "Ruokolahti"
+    location_query: "Ruokolahti"
+  - code: "690"
+    name_fi: "Rautjärvi"
+    location_query: "Rautjärvi"
+  - code: "580"
+    name_fi: "Parikkala"
+    location_query: "Parikkala"
