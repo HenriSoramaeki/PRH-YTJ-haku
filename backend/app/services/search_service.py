@@ -60,6 +60,7 @@ def run_search(
     municipalities = cfg.get("municipalities") or []
     client = PrhClient()
     errors: list[str] = []
+    progress_log: list[str] = []
     seen: dict[str, dict[str, Any]] = {}
     today = date.today()
 
@@ -86,8 +87,10 @@ def run_search(
             msg = f"{loc}: {e}"
             logger.error(msg)
             errors.append(msg)
+            progress_log.append(f"{loc}: virhe — {e}")
             continue
 
+        progress_log.append(f"{loc}: {len(rows)} PRH-riviä haettu")
         for c in rows:
             bid = extract_business_id(c)
             if not bid:
@@ -151,6 +154,8 @@ def run_search(
 
     rows_out.sort(key=lambda x: (-x.ict_score, x.name or ""))
 
+    progress_log.append(f"Suodatuksen jälkeen: {len(rows_out)} yritystä")
+
     return SearchResponse(
         date_from=date_from,
         mode=mode,
@@ -158,4 +163,5 @@ def run_search(
         companies=rows_out,
         total_after_filter=len(rows_out),
         errors=errors,
+        progress_log=progress_log,
     )

@@ -57,6 +57,10 @@ class SearchResponse(BaseModel):
     companies: list[CompanyRow]
     total_after_filter: int
     errors: list[str] = Field(default_factory=list)
+    progress_log: list[str] = Field(
+        default_factory=list,
+        description="Hakuvaiheet (kunta kerrallaan) — hyödyllinen debugissa ja hitaissa hauissa",
+    )
 
 
 class RegionInfo(BaseModel):

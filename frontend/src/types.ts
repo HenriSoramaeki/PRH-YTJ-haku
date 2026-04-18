@@ -32,4 +32,5 @@ export interface SearchResponse {
   companies: CompanyRow[];
   total_after_filter: number;
   errors: string[];
+  progress_log?: string[];
 }

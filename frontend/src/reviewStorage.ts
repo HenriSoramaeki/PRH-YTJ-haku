@@ -35,3 +35,11 @@ export function mergeReviewsIntoRows(rows: CompanyRow[]): CompanyRow[] {
     review_status: m[r.business_id] ?? r.review_status ?? null,
   }));
 }
+
+export function clearAllReviews(): void {
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    /* ignore */
+  }
+}

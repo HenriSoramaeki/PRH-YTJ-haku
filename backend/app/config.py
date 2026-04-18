@@ -23,8 +23,13 @@ class Settings(BaseSettings):
 
     app_name: str = "Etelä-Karjala ICT - yrityshaku"
     prh_base_url: str = Field(default="https://avoindata.prh.fi/opendata-ytj-api/v3")
-    prh_timeout_seconds: float = 60.0
-    prh_max_retries: int = 3
+    prh_timeout_seconds: float = 120.0
+    prh_max_retries: int = 5
+    # Julkinen hostaus: aseta molemmat → kaikki pyynnöt (paitsi OPTIONS) vaativat Authorization: Basic …
+    basic_auth_user: str | None = Field(default=None)
+    basic_auth_password: str | None = Field(default=None)
+    # Monivaiheinen Docker: aseta repo-juuri (esim. /srv), jossa on frontend/dist/
+    project_root: str | None = Field(default=None)
     cors_origins: list[str] = Field(
         default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173", "http://localhost:8080"]
     )

@@ -214,3 +214,63 @@ table.results th {
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+.row.wrap {
+  align-items: flex-end;
+}
+
+.hint {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.filters {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.field input.narrow {
+  min-width: 6rem;
+  width: 6.5rem;
+}
+
+button.smallbtn {
+  padding: 0.35rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.thbtn {
+  all: unset;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.thbtn:hover {
+  color: var(--accent);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.authbox,
+.progress {
+  margin-top: 0.85rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+  font-size: 0.9rem;
+}
+
+.progress ol {
+  margin: 0.35rem 0 0 1.2rem;
+  padding: 0;
+}

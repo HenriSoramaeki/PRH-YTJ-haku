@@ -73,6 +73,11 @@ class PrhClient:
                 with httpx.Client(timeout=self._timeout) as client:
                     r = client.get(url, params=params)
                 if r.status_code == 429:
+                    if attempt >= self._max_retries - 1:
+                        raise PrhApiError(
+                            "PRH rajapinta palautti liian monta pyyntöä lyhyessä ajassa (429). "
+                            "Odota muutama minuutti ja yritä uudelleen."
+                        )
                     wait = 2**attempt
                     logger.warning("PRH rate limit 429, retry in %ss", wait)
                     time.sleep(wait)

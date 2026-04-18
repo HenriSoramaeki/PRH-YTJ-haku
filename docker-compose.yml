@@ -2,10 +2,11 @@ services:
   api:
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
+      EK_PROJECT_ROOT: /srv
       EK_CORS_ORIGINS: "http://localhost:8080,http://127.0.0.1:8080,http://localhost:5173"
 
   web:

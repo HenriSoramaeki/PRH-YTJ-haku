@@ -1,3 +1,4 @@
+import { getAuthHeaders } from "./authSession";
 import type { CompanyRow, SearchMode, SearchResponse } from "./types";
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? "";
@@ -16,7 +17,7 @@ async function parseError(res: Response): Promise<string> {
 export async function runSearch(dateFrom: string, mode: SearchMode): Promise<SearchResponse> {
   const res = await fetch(`${API_BASE}/api/search`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify({ date_from: dateFrom, mode }),
   });
   if (!res.ok) throw new Error(await parseError(res));
@@ -27,7 +28,7 @@ export async function downloadExport(format: "csv" | "xlsx", companies: CompanyR
   const path = format === "csv" ? "/api/export/csv" : "/api/export/xlsx";
   const res = await fetch(`${API_BASE}${path}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...getAuthHeaders() },
     body: JSON.stringify({ companies }),
   });
   if (!res.ok) throw new Error(await parseError(res));

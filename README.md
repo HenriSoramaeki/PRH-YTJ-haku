@@ -1,6 +1,6 @@
 # Etelä-Karjala ICT — yrityshaku (MVP)
 
-Sisäinen työkalu kunnan virkamiehille: etsii [PRH:n YTJ-avoimen datan](https://avoindata.prh.fi/fi) kautta Etelä-Karjalan kunnissa sijaitsevia yrityksiä, jotka on rekisteröity tai päivitetty valitun päivämäärän jälkeen, ja pisteyttää ne ICT-avainsanoilla (virallinen toimiala, nimet, apunimet, muut tekstikentät).
+Sisäinen työkalu: etsii [PRH:n YTJ-avoimen datan](https://avoindata.prh.fi/fi) kautta Etelä-Karjalan kunnissa sijaitsevia yrityksiä, jotka on rekisteröity tai päivitetty valitun päivämäärän jälkeen, ja pisteyttää ne ICT-avainsanoilla (virallinen toimiala, nimet, apunimet, muut tekstikentät).
 
 **Tärkeää:** tulokset ovat ehdotuksia, eivät juridista totuutta. Yksityiset elinkeinonharjoittajat eivät näy kaupparekisteriin perustuvassa YTJ-aineistossa.
 
@@ -9,6 +9,16 @@ Sisäinen työkalu kunnan virkamiehille: etsii [PRH:n YTJ-avoimen datan](https:/
 - `backend/` — FastAPI, PRH-asiakas, pisteytys, CSV/XLSX-vienti (ei palvelintietokantaa)
 - `frontend/` — React + TypeScript (Vite)
 - `backend/config/` — `region.yaml` (kunnat), `keywords.yaml` (ICT-termit, `exclude_keywords` / `exclude_tol_prefixes` ei-ICT -suodatukselle)
+- `Dockerfile` (juuri) — yksi kuva: Node build + Python + `frontend/dist` → sopii **Render / Fly** -tyyppiseen hostaukseen
+- `.github/dependabot.yml` — riippuvuuksien kuukausittainen tarkistus
+
+### Käyttöliittymä (lyhyesti)
+
+- Pikavalinnat **6 kk / 3 kk / 1 kk** alkupäivälle, oletus **6 kk**.
+- **Suodatus**: nimi, minimi-ICT-piste; **lajittelu**: sarakkeen otsikkoa painamalla.
+- **Hakuvaiheet**: vastauksen `progress_log` näkyy laajennettavassa listassa.
+- **Arviot** vain **localStorage**; **Tyhjennä arviot** -nappi.
+- **HTTP Basic** (valinnainen): jos palvelimella `EK_BASIC_AUTH_*`, täytä tunnukset UI:n ”Palvelimen suojaus” -kohdassa (tallennetaan **sessionStorageen**).
 
 ## Helppokäyttöinen käynnistys (Windows)
 
@@ -57,17 +67,37 @@ python -m pytest tests -v
 docker compose up --build
 ```
 
-- Käyttöliittymä: `http://localhost:8080` (nginx välittää `/api` → backend)
-- API suoraan: `http://localhost:8000` (esim. `GET /api/health`)
+- **API + käyttöliittymä samassa kontissa** (juuren `Dockerfile`): `http://localhost:8000` (UI + `/api/...`).
+- **nginx** portissa 8080: edelleen erillinen `web`-palvelu; välittää `/api` → `api:8000`.
 
 **Arviot** (relevantti / ei relevantti / myöhemmin) tallentuvat vain **selaimen localStorageen**, ei palvelimelle.
 
 ## Konfiguraatio
 
 - Kopioi `backend/config/examples/` -tiedostot `config/`-hakemistoon ja muokkaa tarvittaessa.
-- Ympäristömuuttujat (esim. `.env` backend-hakemistossa):
+- Ympäristömuuttujat (esim. `.env` backend-hakemistossa tai kontissa):
   - `EK_PRH_BASE_URL` — oletus `https://avoindata.prh.fi/opendata-ytj-api/v3`
-  - `EK_CORS_ORIGINS` — pilkuilla erotettu lista, esim. `http://localhost:5173,http://localhost:8080`
+  - `EK_PRH_TIMEOUT_SECONDS` — oletus `120` (pitkät PRH-haut)
+  - `EK_CORS_ORIGINS` — pilkuilla erotettu lista, esim. `http://localhost:5173,https://oma-sovellus.onrender.com`
+  - `EK_PROJECT_ROOT` — juuren `Dockerfile`-kuvassa oletus **`/srv`** (polku jossa `frontend/dist` ja `backend`)
+  - `EK_BASIC_AUTH_USER` / `EK_BASIC_AUTH_PASSWORD` — jos molemmat asetettu, **kaikki** API- ja UI-pyynnöt vaativat `Authorization: Basic …` (selaimessa käytä sovelluksen lomaketta)
+
+## Render (tai vastaava Docker-host)
+
+1. Vie koodi GitHubiin.
+2. Renderissä: **New → Web Service** → valitse repo.
+3. Asetukset:
+   - **Runtime:** Docker
+   - **Dockerfile path:** `Dockerfile` (repon juuri)
+   - **Root directory:** tyhjä tai `.`
+4. **Environment** (vähintään):
+   - `EK_PROJECT_ROOT` = `/srv` (sama kuin juuren Dockerfilessa)
+   - `EK_CORS_ORIGINS` = `https://<sinun-palvelusi>.onrender.com` (oma Render-URL)
+5. Valinnainen suojaus: `EK_BASIC_AUTH_USER` ja `EK_BASIC_AUTH_PASSWORD` — käyttäjät syöttävät samat tunnukset sovelluksen **Palvelimen suojaus** -osiossa (sessionStorage → `Authorization`-header).
+
+**Huom:** Ilmaisella tasolla instanssi voi **nukkua**; ensimmäinen pyyntö voi olla hidas. Pitkä PRH-haku voi ylittää välityspalvelimen aikarajan — tarvittaessa kapeampi päiväväli tai `fetch_limits` `region.yaml`:ssa.
+
+Vaihtoehto: **Blueprint** — tiedosto `render.yaml` juuressa (`New → Blueprint`).
 
 ## Rajapinta (lyhyt)
 
@@ -75,7 +105,7 @@ docker compose up --build
 |--------|--------|--------|
 | GET | `/api/health` | Terveystarkistus |
 | GET | `/api/region` | Alueen ja kuntien metatiedot |
-| POST | `/api/search` | `{ "date_from": "YYYY-MM-DD", "mode": "new_only" \| "new_or_changed" }` |
+| POST | `/api/search` | `{ "date_from": "YYYY-MM-DD", "mode": "new_only" \| "new_or_changed" }` → vastauksessa myös `progress_log` |
 | POST | `/api/export/csv` | `{ "companies": [ ... ] }` |
 | POST | `/api/export/xlsx` | `{ "companies": [ ... ] }` |
 

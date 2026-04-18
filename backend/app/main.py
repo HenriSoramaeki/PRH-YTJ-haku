@@ -12,6 +12,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.config import get_settings
+from app.middleware.basic_auth import OptionalBasicAuthMiddleware
 from app.routers import api
 
 logging.basicConfig(
@@ -28,12 +29,22 @@ async def lifespan(_app: FastAPI):
     yield
 
 
+def _repository_root() -> Path:
+    settings = get_settings()
+    if settings.project_root:
+        return Path(settings.project_root).resolve()
+    # backend/app/main.py → repo root
+    return Path(__file__).resolve().parents[2]
+
+
 def create_app() -> FastAPI:
     settings = get_settings()
     logging.getLogger().setLevel(settings.log_level.upper())
 
     app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 
+    # CORS viimeisenä = ulompi kerros, jotta 401 ym. saavat CORS-headerit
+    app.add_middleware(OptionalBasicAuthMiddleware)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -45,7 +56,7 @@ def create_app() -> FastAPI:
     app.include_router(api.router)
 
     # Yksi osoite selaimelle: tarjoa Vite-build (frontend/dist) jos olemassa
-    project_root = Path(__file__).resolve().parent.parent.parent
+    project_root = _repository_root()
     dist = project_root / "frontend" / "dist"
     assets_dir = dist / "assets"
     if dist.is_dir() and (dist / "index.html").is_file():

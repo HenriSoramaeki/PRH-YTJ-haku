@@ -1,0 +1,20 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Liitä repo → New Blueprint → valitse render.yaml
+
+services:
+  - type: web
+    name: ek-ict-haku
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: EK_PROJECT_ROOT
+        value: /srv
+      - key: EK_CORS_ORIGINS
+        sync: false
+      - key: EK_BASIC_AUTH_USER
+        sync: false
+      - key: EK_BASIC_AUTH_PASSWORD
+        sync: false
