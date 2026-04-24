@@ -1,7 +1,7 @@
 # Yksi kuva: React-build + FastAPI (Render, Fly jne.)
 # EK_PROJECT_ROOT=/srv → frontend/dist ja backend rinnakkain
 
-FROM node:20-alpine AS frontend-build
+FROM node:25-alpine AS frontend-build
 WORKDIR /src
 COPY frontend/package.json ./
 RUN npm install
